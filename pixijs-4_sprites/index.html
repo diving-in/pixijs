@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+    <head>
+<style>
+    body{
+        margin: 0;
+    }
+
+    canvas{
+        display: block;
+        background: blue;
+    }
+</style>
+    </head>
+    <body>
+        <canvas id="mycanvas"></canvas>
+        <script src="pixi.js"></script>
+        <script type="text/javascript">
+            const canvas = document.getElementById('mycanvas');
+
+            const app = new PIXI.Application({
+                view: canvas,
+                width: window.innerWidth, 
+                height: window.innerHeight
+            });
+
+            const texture = PIXI.Texture.from('sprite2.png');
+            const texture2 = PIXI.Texture.from('sprite.png');
+
+            let sprite1,
+                sprite2,
+                sprite3;
+
+            img = new PIXI.Sprite(texture);
+            img.x = app.renderer.width / 2;
+            img.y = app.renderer.height / 2;
+            img.anchor.x = 0.5;
+            img.anchor.y = 0.5;
+            app.stage.addChild(img);
+
+            let container = new PIXI.Container();
+            app.stage.addChild(container);
+
+
+            let sprites = [];
+
+            addSprites();
+
+            app.ticker.add(animate);
+
+
+            function addSprites() {
+                for (let i = 0; i < 10; i++) {
+                    let sprite = new PIXI.Sprite(texture2);
+                    sprite.x = Math.random() * app.renderer.screen.width;
+                    sprite.y = Math.random() * app.renderer.screen.height;
+                    sprite.tint = Math.random() * 0xffffff;
+                    sprite.anchor.set(0.5);
+
+                    container.addChild(sprite);
+                    sprites.push(sprite);
+                }
+            }
+
+
+            let delta = 0;
+
+            function animate() {
+                delta += 0.1;
+
+                container.y = Math.sin(delta) * 100;    
+
+                for (let i = 0; i < sprites.length; i++) {
+                    sprites[i].rotation += 0.1;
+                }
+            }
+        </script>
+    </body>
+</html>
+
+
+
+
