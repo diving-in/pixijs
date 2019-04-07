@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+    <head>
+<style>
+    body{
+        margin: 0;
+    }
+
+    canvas{
+        display: block;
+        background: blue;
+    }
+</style>
+    </head>
+    <body>
+        <canvas id="mycanvas"></canvas>
+        <script src="pixi.js"></script>
+        <script type="text/javascript">
+            const canvas = document.getElementById('mycanvas');
+
+            const app = new PIXI.Application({
+                view: canvas,
+                width: window.innerWidth, 
+                height: window.innerHeight
+            });
+
+            const graphic = new PIXI.Graphics();
+            graphic.x = app.renderer.width / 2;
+            graphic.y = app.renderer.height / 2;
+            app.stage.addChild(graphic);
+
+            //circle
+            graphic.lineStyle(5, 0x00ff00);
+            graphic.beginFill(0xff0000);
+            graphic.drawCircle(0, 0, 100);
+            graphic.endFill();
+
+            //rectangle
+            graphic.lineStyle(5, 0x0000ff);
+            graphic.beginFill(0x00ff00);
+            graphic.drawRect(0, 0, 100, 200);
+            graphic.endFill();
+
+            //star
+            graphic.lineStyle(5, 0x0000ff);
+            graphic.beginFill(0x00ff00);
+            graphic.drawStar(0, 0, 5, 100, 40);
+            graphic.endFill();
+
+
+            //shape
+            graphic.lineStyle(5, 0x0000ff);
+            graphic.beginFill(0x00ff00);
+            graphic.drawShape(new PIXI.Circle(0, 0, 10));
+            graphic.endFill();
+            
+
+            //polygon
+            graphic.lineStyle(5, 0x0000ff);
+            graphic.beginFill(0x00ff00);
+            graphic.drawPolygon([new PIXI.Point(100, 100), new PIXI.Point(100, 200), new PIXI.Point(200, 100)]);
+            graphic.endFill();            
+            
+
+            //line drawing
+            graphic.lineStyle(10, 0xff0000);
+            graphic.beginFill(0x00ff00);
+            graphic.moveTo(0, 0);
+            graphic.lineTo(100, 100);
+            graphic.lineTo(0, 350);
+            graphic.quadraticCurveTo(-30, 300, -50, 400);
+            graphic.bezierCurveTo(450, 450, 500, 500, 550, 400);
+            graphic.arc(0, 0, 50, 0, Math.PI);
+            graphic.arcTo(0, 0, 50, -200, 100);
+
+            graphic.closePath();
+            graphic.endFill();       
+
+
+            graphic.moveTo(150, 150);
+            graphic.lineTo(160, 170);
+            graphic.lineTo(120, 160);
+            graphic.addHole();     
+
+
+            app.ticker.add(animate);
+
+            function animate() {
+                //graphic.rotation += 0.1;
+            }
+        </script>
+    </body>
+</html>
