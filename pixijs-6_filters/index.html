@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+    <head>
+<style>
+    body{
+        margin: 0;
+    }
+
+    canvas{
+        display: block;
+        background: blue;
+    }
+</style>
+    </head>
+    <body>
+        <canvas id="mycanvas"></canvas>
+        <script src="pixi.js"></script>
+        <script id="vertShader" type="x-shader/x-vertex">
+//pixi.js/packages/core/src/fragments/default.vert
+attribute vec2 aVertexPosition;
+attribute vec2 aTextureCoord;
+uniform mat3 projectionMatrix;
+varying vec2 vTextureCoord;
+void main(void)
+{
+    gl_Position = vec4((projectionMatrix * vec3(aVertexPosition, 1.0)).xy, 0.0, 1.0);
+    vTextureCoord = aTextureCoord;
+}
+        </script>
+        <script id="fragShader" type="x-shader/x-frag">
+varying vec2 vTextureCoord;
+uniform sampler2D uSampler;
+uniform float delta;
+void main(void)
+{
+    vec4 color = texture2D(uSampler, vTextureCoord);
+    if (color.a != 0.0){
+        color.r = delta;
+        color.g -= delta;
+        color.b -= delta;
+    }
+    gl_FragColor = color;
+}
+        </script>
+        <script type="text/javascript">
+            const canvas = document.getElementById('mycanvas');
+
+            const app = new PIXI.Application({
+                view: canvas,
+                width: window.innerWidth, 
+                height: window.innerHeight
+            });
+
+            const vShader = vertShader.innerText;
+            const fShader = fragShader.innerText;
+            const uniforms = {
+                delta: 0
+            };
+
+            //vShader = new PIXI.filters.AbstractFilter().vertexSrc;
+            const myFilter = new PIXI.Filter(vShader, fShader, uniforms);
+
+            const texture = PIXI.Texture.from('sprite.png');
+            const img = new PIXI.Sprite(texture);
+            img.x = app.screen.width / 2;
+            img.y = app.screen.height / 2;
+            img.anchor.x = 0.5;
+            img.anchor.y = 0.5;
+            //img.filters = [new PIXI.filters.BlurFilter()];
+            img.filters = [myFilter];
+            app.stage.addChild(img);
+
+
+            app.ticker.add(animate);
+
+            let delta = 0;
+            function animate() {
+                delta += 0.1;
+                uniforms.delta = 0.5 + Math.sin(delta) * 0.5;
+                //img.rotation += 0.1;
+            }
+        </script>
+    </body>
+</html>
